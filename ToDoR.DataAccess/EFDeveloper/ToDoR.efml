@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<efcore namespace="ToDoR.DataAccess.Context" p1:name="ToDoContext" p1:Guid="63ed850f-bf3c-4445-9de1-f3e76b1b2d09" xmlns:p1="http://devart.com/schemas/EntityDeveloper/1.0">
-  <class name="ToDoR.Common.Contracts.Users" entity-set="Users" table="users" p1:Guid="a13e2df7-77d1-41f8-8ef9-1db9d3982913">
+<efcore namespace="ToDoR.DataAccess.Context" p1:name="ToDoDbContext" p1:Guid="63ed850f-bf3c-4445-9de1-f3e76b1b2d09" xmlns:p1="http://devart.com/schemas/EntityDeveloper/1.0">
+  <class name="ToDoR.Common.Contracts.User" entity-set="Users" table="users" p1:Guid="a13e2df7-77d1-41f8-8ef9-1db9d3982913">
     <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="6c11dcf4-314c-4f90-a6cf-50421760317a">
       <column name="id" />
     </id>
@@ -17,7 +17,7 @@
       <column name="deleted_at" />
     </property>
   </class>
-  <class name="ToDoR.Common.Contracts.TaskGroups" entity-set="TaskGroups" table="task_groups" p1:Guid="f0ec1d77-1756-44ac-aab5-9b78d928ae65">
+  <class name="ToDoR.Common.Contracts.TaskGroup" entity-set="TaskGroups" table="task_groups" p1:Guid="f0ec1d77-1756-44ac-aab5-9b78d928ae65">
     <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="72fcd092-86d5-4b67-886f-99b3c2ecbcd9">
       <column name="id" />
     </id>
@@ -28,27 +28,24 @@
       <column name="name" />
     </property>
   </class>
-  <class name="ToDoR.Common.Contracts.Tasks" entity-set="Tasks" table="tasks" p1:Guid="29cfe783-9b34-460b-8f60-b97847dbf16f">
+  <class name="ToDoR.Common.Contracts.DoTask" entity-set="DoTasks" table="do_tasks" p1:Guid="29cfe783-9b34-460b-8f60-b97847dbf16f">
     <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="0623b829-7ae9-4ade-9e1f-4b0507fa2592">
       <column name="id" />
     </id>
     <property name="UserId" type="Guid" p1:ValidateRequired="true" p1:Guid="7da93d05-1a6b-43b0-8638-b7b4f15fe558">
       <column name="user_id" not-null="False" />
     </property>
-    <property name="TaskGroupId" type="Guid" p1:ValidateRequired="true" p1:Guid="0ce89ca2-303b-44c9-91a0-7f01b943f9f7">
+    <property name="TaskGroupId" type="Guid" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="0ce89ca2-303b-44c9-91a0-7f01b943f9f7">
       <column name="task_group_id" not-null="False" />
     </property>
-    <property name="Task" type="String" p1:ValidateRequired="true" p1:Guid="dd4101d0-74cd-46d1-91ec-a27f10961d20">
-      <column name="task" />
+    <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="dd4101d0-74cd-46d1-91ec-a27f10961d20">
+      <column name="name" />
     </property>
     <property name="Note" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="4ab448f8-311c-4886-b9c8-6b029a4c4516">
       <column name="note" />
     </property>
     <property name="DueDate" type="Date" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="492e9832-10fc-46b2-8b25-4a280de4c19d">
       <column name="due_date" />
-    </property>
-    <property name="Repeat" type="Int32" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="bf76a4a1-2641-40c9-beb6-76ba6b0ecd1d">
-      <column name="repeat" />
     </property>
     <property name="Status" type="Int32" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="e6a742c8-9942-4815-93cd-fe0f680fac1f">
       <column name="status" />
@@ -62,18 +59,18 @@
   </class>
   <associations>
     <association name="Users_Tasks" cardinality="OneToMany" on-delete="Cascade" p1:Guid="1ed29810-e031-4eb2-9bd0-a0c57c5f86d7">
-      <end1 multiplicity="One" name="Users" class="Tasks" relation-class="Users" constrained="True" lazy="False" p1:Guid="4964714f-10d2-45d7-8367-facc8788e821">
+      <end1 multiplicity="One" name="Users" class="DoTask" relation-class="User" constrained="True" lazy="False" p1:Guid="4964714f-10d2-45d7-8367-facc8788e821">
         <property name="Id" />
       </end1>
-      <end2 multiplicity="Many" name="Tasks" class="Users" relation-class="Tasks" lazy="False" p1:Guid="0e915d54-6537-4afb-923d-432eeb544f4b">
+      <end2 multiplicity="Many" name="Tasks" class="User" relation-class="DoTask" lazy="False" p1:Guid="0e915d54-6537-4afb-923d-432eeb544f4b">
         <property name="UserId" />
       </end2>
     </association>
     <association name="TaskGroups_Tasks" cardinality="OneToMany" p1:Guid="292232e1-7aa1-40f1-a5ce-a88b5cd8b489">
-      <end1 multiplicity="One" name="TaskGroups" class="Tasks" relation-class="TaskGroups" constrained="True" lazy="False" p1:Guid="c7f49a6b-21e1-4a8e-8072-4020f74d2433">
+      <end1 multiplicity="ZeroOrOne" name="TaskGroups" class="DoTask" relation-class="TaskGroup" constrained="True" lazy="False" p1:Guid="c7f49a6b-21e1-4a8e-8072-4020f74d2433">
         <property name="Id" />
       </end1>
-      <end2 multiplicity="Many" name="Tasks" class="TaskGroups" relation-class="Tasks" lazy="False" p1:Guid="39bfa453-8f98-4790-bec0-580daf15fe01">
+      <end2 multiplicity="Many" name="Tasks" class="TaskGroup" relation-class="DoTask" lazy="False" p1:Guid="39bfa453-8f98-4790-bec0-580daf15fe01">
         <property name="TaskGroupId" />
       </end2>
     </association>

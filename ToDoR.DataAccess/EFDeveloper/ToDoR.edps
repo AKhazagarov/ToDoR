@@ -4,10 +4,10 @@
     <Connection ConnectionString="" Provider="" />
     <Generation>
       <GeneratedFiles>
-        <File Name="ToDoR.ToDoContext.cs" DestinationFolder="..\Context" />
-        <File Name="ToDoR.Users.cs" DestinationFolder="..\..\ToDoR.Common\Contracts" />
-        <File Name="ToDoR.TaskGroups.cs" DestinationFolder="..\..\ToDoR.Common\Contracts" />
-        <File Name="ToDoR.Tasks.cs" DestinationFolder="..\..\ToDoR.Common\Contracts" />
+        <File Name="ToDoDbContext.cs" DestinationFolder="..\Context" />
+        <File Name="User.cs" DestinationFolder="..\..\ToDoR.Common\Contracts" />
+        <File Name="TaskGroup.cs" DestinationFolder="..\..\ToDoR.Common\Contracts" />
+        <File Name="DoTask.cs" DestinationFolder="..\..\ToDoR.Common\Contracts" />
       </GeneratedFiles>
     </Generation>
     <DatabaseFirstNamingRules>
