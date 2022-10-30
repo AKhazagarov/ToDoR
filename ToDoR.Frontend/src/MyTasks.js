@@ -287,6 +287,7 @@ export class MyTasks extends Component {
           </button>
         </td>
         <td>{dep.name}</td>
+        <td>{dep.note}</td>
         <td>{getDate(dep)}</td>
         <td>
           <button type="button"
@@ -330,7 +331,7 @@ export class MyTasks extends Component {
             <td colSpan="6">
               <form>
                 <div className="row">
-                  <div className="col-md-5">
+                  <div className="col-md-6">
                   <Form.Control value={nameAdd} onChange={this.changeTaskNameForAdd} type="text" placeholder="Meine Aufgabe ist..." />
                   </div>
                   <div className="col-md-3">
@@ -355,6 +356,7 @@ export class MyTasks extends Component {
           <tr>            
             <th></th>
             <th>To Do</th>
+            <th>Note</th>
             <th>Due Date</th>
             <th></th>
           </tr>

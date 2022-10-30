@@ -1,15 +1,23 @@
 ﻿namespace ToDoR.Common.Contracts
 {
+    /// <summary>
+    /// Contract for adding a new entity to the database
+    /// </summary>
     public class DoTaskAdd
     {
-        public Guid? UserId { get; set; }
-
-        public Guid? TaskGroupId { get; set; }
-
+        /// <summary>
+        /// Task name
+        /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// Task note
+        /// </summary>
         public string? Note { get; set; }
 
+        /// <summary>
+        /// Deadline
+        /// </summary>
         public DateTime? DueDate { get; set; }
     }
 }

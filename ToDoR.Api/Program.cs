@@ -17,20 +17,17 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(c =>
     c.AddPolicy("AllowOrigin", op => op.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
 );
-
-string mode = "Data Source=localhost;Initial Catalog=to_do_db;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
-
+string connString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<ToDoDbContext>(options => {
-options.UseSqlServer(mode);
+options.UseSqlServer(connString);
 });
 
 builder.Services.AddScoped<ToDoDbContext>(sp => {
-    return new ToDoDbContext(new DbContextOptionsBuilder<ToDoDbContext>().UseSqlServer(mode).Options);
+    return new ToDoDbContext(new DbContextOptionsBuilder<ToDoDbContext>().UseSqlServer(connString).Options);
 });
 
 builder.Services.AddScoped<IDoTaskProvider, DoTaskProvider>();
-
 
 var app = builder.Build();
 app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

@@ -6,8 +6,6 @@ namespace ToDoR.Api.Models
     {
         public Guid Id { get; set; }
 
-        public Guid? TaskGroup { get; set; }
-
         public string Name { get; set; }
 
         public string Note { get; set; }

@@ -2,6 +2,9 @@
 
 namespace ToDoR.DataAccess.Interfaces
 {
+    /// <summary>
+    /// ToDo list interface
+    /// </summary>
     public interface IDoTaskProvider
     {
         /// <summary>

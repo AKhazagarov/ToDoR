@@ -1,5 +1,9 @@
 ﻿namespace ToDoR.Common.Contracts
 {
+    /// <summary>
+    /// User
+    /// </summary>
+    /// <remarks>Not used</remarks>
     public partial class User {
 
         public User()
@@ -26,5 +30,4 @@
 
         #endregion
     }
-
 }

@@ -19,9 +19,9 @@ namespace ToDoR.Api.Controllers
         }
 
         /// <summary>
-        /// Returns all tasks
+        /// Returns all items in the to-do list
         /// </summary>
-        /// <returns></returns>
+        /// <returns>to-do list</returns>
         [HttpGet]
         [ProducesResponseType(typeof(ActionResult<List<TaskModel>>), StatusCodes.Status200OK)]
         public async Task<ActionResult<List<TaskModel>>> GetAll()
@@ -37,22 +37,21 @@ namespace ToDoR.Api.Controllers
                     Note = t.Note,
                     Status = t.Status,
                     Name = t.Name,
-                    TaskGroup = t.TaskGroupId,
                 });
 
             return Ok(tasksModel);
         }
 
-
+        /// <summary>
+        /// Returns all items in the to-do list by Id
+        /// </summary>
+        /// <param name="id">Record ID</param>
+        /// <returns>To-do record</returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ActionResult<TaskModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<TaskModel>> GetById(Guid? id)
+        public async Task<ActionResult<TaskModel>> GetById(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var tasks = await _dbProvider.Requests.FirstOrDefaultAsync(m => m.Id == id);
 
             if (tasks == null)
@@ -64,16 +63,23 @@ namespace ToDoR.Api.Controllers
         }
 
         /// <summary>
-        /// Returns all tasks
+        /// Returns all items in the to-do list by filter
         /// </summary>
-        /// <returns></returns>
+        /// <param name="filter">Filter</param>
+        /// <returns>to-do list</returns>
         [HttpPost("byFilter")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ActionResult<List<TaskModel>>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<List<TaskModel>>> GetByFilter(TaslFilterModel filter)
+        public async Task<ActionResult<List<TaskModel>>> GetByFilter(TaskFilterModel filter)
         {
+            if (filter is null)
+            {
+                return BadRequest();
+            }
+
             var tasks = _dbProvider.Requests;
 
-            if (filter.isDeleted != true)
+            if (filter.ShowDeleted != true)
             {
                 tasks = tasks.Where(s => s.DeletedAt == null);
             }
@@ -89,12 +95,16 @@ namespace ToDoR.Api.Controllers
                     Note = t.Note,
                     Status = t.Status,
                     Name = t.Name,
-                    TaskGroup = t.TaskGroupId,
                 });
 
             return Ok(tasksModel);
         }
 
+        /// <summary>
+        /// Adds a new record to the database
+        /// </summary>
+        /// <param name="taskAdd">New task</param>
+        /// <returns>Status</returns>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -103,7 +113,7 @@ namespace ToDoR.Api.Controllers
         {
             if (taskAdd is null)
             {
-                return BadRequest("Злёбне крыса");
+                return BadRequest();
             }
 
             if (taskAdd.Name.Length < 10)
@@ -116,9 +126,15 @@ namespace ToDoR.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Changes the record
+        /// </summary>
+        /// <param name="model">The record</param>
+        /// <returns>Status</returns>
         [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Consumes("application/json")]
         public async Task<IActionResult> Edit(TaskEditModel model)
         {
@@ -137,7 +153,6 @@ namespace ToDoR.Api.Controllers
             await _dbProvider.Update(new DoTaskEdit()
             {
                 Id = task.Id,
-                TaskGroupId = model.TaskGroupId,
                 Name = model.Name,
                 Note = model.Note,
                 DueDate = model.DueDate,
@@ -146,15 +161,21 @@ namespace ToDoR.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Marks a task as completed
+        /// </summary>
+        /// <param name="id">Record ID</param>
+        /// <returns>Status</returns>
         [HttpPut("complete/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Consumes("application/json")]
         public async Task<IActionResult> MarkComplete(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var task = await _dbProvider.Requests.FirstOrDefaultAsync(m => m.Id == id);
@@ -169,15 +190,21 @@ namespace ToDoR.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Marks a task as not completed
+        /// </summary>
+        /// <param name="id">Record ID</param>
+        /// <returns>Status</returns>
         [HttpPut("notComplete/{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [Consumes("application/json")]
         public async Task<IActionResult> MarkNotComplete(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             var task = await _dbProvider.Requests.FirstOrDefaultAsync(m => m.Id == id);
@@ -192,14 +219,19 @@ namespace ToDoR.Api.Controllers
             return Ok();
         }
 
-        // GET: Tasks/Delete/5
+        /// <summary>
+        /// Deletes a record
+        /// </summary>
+        /// <param name="id">Record ID</param>
+        /// <returns>Status</returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ActionResult<DoTask>), StatusCodes.Status200OK)]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (id == Guid.Empty)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             await _dbProvider.Delete(id);

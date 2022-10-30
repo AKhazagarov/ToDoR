@@ -1,5 +1,9 @@
 ﻿namespace ToDoR.Common.Contracts
 {
+    /// <summary>
+    /// Task Category Group List
+    /// </summary>
+    /// <remarks>Not used</remarks>
     public partial class TaskGroup {
 
         public TaskGroup()
@@ -22,5 +26,4 @@
 
         #endregion
     }
-
 }
