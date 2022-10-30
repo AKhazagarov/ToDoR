@@ -29,7 +29,6 @@ export class MyTasks extends Component {
       myTasks: [],
       myCompletedTasks: [],
       id: "",
-      userId: "00000000-0000-0000-0000-000000000000",
       name: "",
       nameAdd: "",
       note: "",
@@ -106,20 +105,20 @@ export class MyTasks extends Component {
     this.setState({ dueDate: e});
   }
 
-  editClick(dep) {
+  editClick(item) {
     function getDate(task) {
       if (task?.dueDate) {
-      return new Date(dep.dueDate);
+      return new Date(item.dueDate);
       }
       return null;
     }
     this.toogleModal(true);
     this.setState({
-      id: dep.id,
-      name: dep.name,
-      note: dep.note,
-      dueDate: getDate(dep),
-      repeat: dep.repeat,
+      id: item.id,
+      name: item.name,
+      note: item.note,
+      dueDate: getDate(item),
+      repeat: item.repeat,
     });
   }
 
@@ -248,12 +247,12 @@ export class MyTasks extends Component {
     })
   }
 
-  taskCallback(dep) {
+  taskCallback(item) {
     function getRowClassName(task) {
       if (task?.dueDate) {
-        const dueDate = new Date(task.dueDate).getTime();
-        const now = new Date().getTime();
-        if (task.status != 1 && dueDate < now.Date) {
+        const dueDate = new Date(task.dueDate).setHours(0,0,0,0);
+        const now = new Date().setHours(0,0,0,0);
+        if (task.status != 1 && dueDate < now) {
           return "table-danger";
         }
       }
@@ -268,31 +267,31 @@ export class MyTasks extends Component {
     
     function getDate(task) {
       if (task?.dueDate) {
-      return Moment(dep.dueDate).format('DD.MM.YYYY');
+      return Moment(item.dueDate).format('DD.MM.YYYY');
       }
       return "Not set";
     }
     
-    const className = getRowClassName(dep);
-    const pathSvf = getDoneSvg(dep);
+    const className = getRowClassName(item);
+    const pathSvf = getDoneSvg(item);
     return (
-      <tr className={className} key={dep.id}>
+      <tr className={className} key={item.id}>
         <td>
           <button type="button"
             className="btn btn-link"
-            onClick={() => this.changeStatusClick(dep)}>
+            onClick={() => this.changeStatusClick(item)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle" viewBox="0 0 16 16">
               <path d={pathSvf}/>
             </svg>
           </button>
         </td>
-        <td>{dep.name}</td>
-        <td>{dep.note}</td>
-        <td>{getDate(dep)}</td>
+        <td>{item.name}</td>
+        <td>{item.note}</td>
+        <td>{getDate(item)}</td>
         <td>
           <button type="button"
             className="btn btn btn-link mr-1"
-            onClick={() => this.editClick(dep)}>
+            onClick={() => this.editClick(item)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-pencil-square" viewBox="0 0 16 16">
               <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
               <path fillRule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z" />
@@ -300,7 +299,7 @@ export class MyTasks extends Component {
           </button>
           <button type="button"
             className="btn btn btn-link mr-1"
-            onClick={() => this.deleteClick(dep.id)}>
+            onClick={() => this.deleteClick(item.id)}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-trash-fill" viewBox="0 0 16 16">
               <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
             </svg>
