@@ -29,12 +29,13 @@ To start the frontend, use the "npm start" command in the "ToDoR.Frontend" direc
 DESCRIPTION
 -----------
 
-The solution consists of 5 main directories:
+The solution consists of 6 main directories:
 * ToDoR.Api - web service.
 * ToDoR.Common - Common files for the project, contracts..
 * ToDoR.DataAccess- library contains classes for working with the database.
 * ToDoR.Migrations - сontains migration files for the database.
 * ToDoR.Frontend - Web GUI on React JS.
+* Tests - folder containing tests for TasksController.
 
 ToDoR is the simplest example of implementing a diary using C# and React JS. The project can:
 * Adding tasks.

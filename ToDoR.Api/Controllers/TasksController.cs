@@ -43,26 +43,6 @@ namespace ToDoR.Api.Controllers
         }
 
         /// <summary>
-        /// Returns all items in the to-do list by Id
-        /// </summary>
-        /// <param name="id">Record ID</param>
-        /// <returns>To-do record</returns>
-        [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(ActionResult<TaskModel>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<TaskModel>> GetById(Guid id)
-        {
-            var tasks = await _dbProvider.Requests.FirstOrDefaultAsync(m => m.Id == id);
-
-            if (tasks == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(tasks);
-        }
-
-        /// <summary>
         /// Returns all items in the to-do list by filter
         /// </summary>
         /// <param name="filter">Filter</param>
@@ -109,7 +89,7 @@ namespace ToDoR.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Consumes("application/json")]
-        public async Task<IActionResult> Add(DoTaskAdd taskAdd)
+        public async Task<ActionResult> Add(DoTaskAdd taskAdd)
         {
             if (taskAdd is null)
             {
@@ -168,7 +148,6 @@ namespace ToDoR.Api.Controllers
         /// <returns>Status</returns>
         [HttpPut("complete/{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Consumes("application/json")]
         public async Task<IActionResult> MarkComplete(Guid id)
@@ -182,7 +161,7 @@ namespace ToDoR.Api.Controllers
 
             if (task is null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             await _dbProvider.ChangeStatus(task.Id, TaskStatusEnum.Done);
@@ -197,7 +176,6 @@ namespace ToDoR.Api.Controllers
         /// <returns>Status</returns>
         [HttpPut("notComplete/{id}")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Consumes("application/json")]
         public async Task<IActionResult> MarkNotComplete(Guid id)
@@ -211,7 +189,7 @@ namespace ToDoR.Api.Controllers
 
             if (task is null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             await _dbProvider.ChangeStatus(task.Id, TaskStatusEnum.New);

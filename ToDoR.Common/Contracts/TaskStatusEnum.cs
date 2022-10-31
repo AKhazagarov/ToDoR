@@ -7,6 +7,5 @@
     {
         New,
         Done,
-        Abandon,
     }
 }

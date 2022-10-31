@@ -4,8 +4,6 @@
     {
         public Guid Id { get; set; }
 
-        public Guid? TaskGroupId { get; set; }
-
         public string Name { get; set; }
 
         public string? Note { get; set; }
